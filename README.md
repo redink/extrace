@@ -1,5 +1,7 @@
 # Extrace
 
+[![Hex.pm Version](https://img.shields.io/hexpm/v/extrace.svg?style=flat-square)](https://hex.pm/packages/extrace)
+
 Extrace is an Elixir wrapper for [Recon Trace](https://ferd.github.io/recon/recon_trace.html).
 
 ## Example
