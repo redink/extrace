@@ -4,7 +4,7 @@ defmodule Extrace.MixProject do
   def project do
     [
       app: :extrace,
-      version: "0.2.0",
+      version: "0.2.1",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -26,7 +26,7 @@ defmodule Extrace.MixProject do
 
   defp deps do
     [
-      {:recon, "~> 2.4"},
+      {:recon, "~> 2.5"},
       {:ex_doc, "~> 0.19", only: [:dev, :test]}
     ]
   end
