@@ -1,5 +1,6 @@
 defmodule Extrace do
   require :recon_trace
+  @inspect_opts pretty: true, inspect_fun: &Extrace.LimitFormatter.limit_inspect/2
 
   @moduledoc """
   `Extrace` provides functions for tracing events in a safe
@@ -366,15 +367,15 @@ defmodule Extrace do
   end
 
   defp format_body(:receive, [msg]) do
-    "< #{inspect(msg, pretty: true)}"
+    "< #{inspect(msg, @inspect_opts)}"
   end
 
   defp format_body(:send, [msg, to]) do
-    " > #{inspect(to, pretty: true)}: #{inspect(msg, pretty: true)}"
+    " > #{inspect(to, @inspect_opts)}: #{inspect(msg, @inspect_opts)}"
   end
 
   defp format_body(:send_to_non_existing_process, [msg, to]) do
-    " > (non_existent) #{inspect(to, pretty: true)}: #{inspect(msg, pretty: true)}"
+    " > (non_existent) #{inspect(to, @inspect_opts)}: #{inspect(msg, @inspect_opts)}"
   end
 
   defp format_body(:call, [{m, f, args}]) do
@@ -386,43 +387,43 @@ defmodule Extrace do
   end
 
   defp format_body(:return_from, [{m, f, arity}, return]) do
-    "#{format_module(m)}.#{f}/#{arity} --> #{inspect(return, pretty: true)}"
+    "#{format_module(m)}.#{f}/#{arity} --> #{inspect(return, @inspect_opts)}"
   end
 
   defp format_body(:exception_from, [{m, f, arity}, {class, val}]) do
-    "#{format_module(m)}.#{f}/#{arity} #{class} #{inspect(val, pretty: true)}"
+    "#{format_module(m)}.#{f}/#{arity} #{class} #{inspect(val, @inspect_opts)}"
   end
 
   defp format_body(:spawn, [spawned, {m, f, args}]) do
-    "spawned #{inspect(spawned, pretty: true)} as #{format_module(m)}.#{f}#{format_args(args)}"
+    "spawned #{inspect(spawned, @inspect_opts)} as #{format_module(m)}.#{f}#{format_args(args)}"
   end
 
   defp format_body(:exit, [reason]) do
-    "EXIT #{inspect(reason, pretty: true)}"
+    "EXIT #{inspect(reason, @inspect_opts)}"
   end
 
   defp format_body(:link, [linked]) do
-    "link(#{inspect(linked, pretty: true)})"
+    "link(#{inspect(linked, @inspect_opts)})"
   end
 
   defp format_body(:unlink, [linked]) do
-    "unlink(#{inspect(linked, pretty: true)})"
+    "unlink(#{inspect(linked, @inspect_opts)})"
   end
 
   defp format_body(:getting_linked, [linker]) do
-    "getting linked by #{inspect(linker, pretty: true)}"
+    "getting linked by #{inspect(linker, @inspect_opts)}"
   end
 
   defp format_body(:getting_unlinked, [unlinker]) do
-    "getting unlinked by #{inspect(unlinker, pretty: true)}"
+    "getting unlinked by #{inspect(unlinker, @inspect_opts)}"
   end
 
   defp format_body(:register, [name]) do
-    "registered as #{inspect(name, pretty: true)}"
+    "registered as #{inspect(name, @inspect_opts)}"
   end
 
   defp format_body(:unregister, [name]) do
-    "no longer registered as #{inspect(name, pretty: true)}"
+    "no longer registered as #{inspect(name, @inspect_opts)}"
   end
 
   defp format_body(:in, [{m, f, arity}]) do
@@ -450,7 +451,7 @@ defmodule Extrace do
   end
 
   defp format_body(type, trace_info) do
-    "unknown trace type #{inspect(type, pretty: true)} -- #{inspect(trace_info, pretty: true)}"
+    "unknown trace type #{inspect(type, @inspect_opts)} -- #{inspect(trace_info, @inspect_opts)}"
   end
 
   defp extract_info(trace_msg) do
@@ -491,7 +492,7 @@ defmodule Extrace do
   end
 
   defp format_args(args) when is_list(args) do
-    arg_str = Enum.map(args, &inspect(&1, pretty: true)) |> Enum.join(", ")
+    arg_str = Enum.map(args, &inspect(&1, @inspect_opts)) |> Enum.join(", ")
     "(" <> arg_str <> ")"
   end
 

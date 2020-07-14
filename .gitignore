@@ -23,3 +23,5 @@ erl_crash.dump
 extrace-*.tar
 
 .elixir_ls
+.idea
+*.iml
