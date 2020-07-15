@@ -42,15 +42,21 @@ defmodule ExtraceTest do
            ) ==
              '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, ...}\n'
 
-    :ok =
-      :recon_map.limit(:struct, fn map -> Map.get(map, :__struct__) == Inspect.Opts end, [
-        :limit,
-        :width
-      ])
+    assert format(
+             {:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %{a: 1, b: 2, c: 3}, ts}
+           ) ==
+             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, c: 3}\n'
+
+    :ok = :recon_map.limit(:struct, &match?(%Inspect.Opts{}, &1), [:limit, :width])
 
     # Format an Struct data
     assert format({:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %Inspect.Opts{}, ts}) ==
              '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> #Inspect.Opts<limit: 50, width: 80, ...>\n'
+
+    map_set = MapSet.new()
+
+    assert format({:trace_ts, pid(0, 1, 2), :return_from, {MapSet, :new, 0}, map_set, ts}) ==
+             '\n#{format_timestamp(ts)} <0.1.2> MapSet.new/0 --> #MapSet<[]>\n'
   end
 
   test "format/1 for :return_to" do

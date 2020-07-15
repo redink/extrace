@@ -1,21 +1,30 @@
 defmodule Extrace.LimitFormatter do
-  @moduledoc false
+  @moduledoc """
+  This module handles formatting `Map` & `Struct`.
+  more details can be found `:recon_map`.
+  """
   import Inspect.Algebra
   alias Code.Identifier
 
+  @doc """
+  Formatting & Trimming output to selected fields.
+  """
   def limit_inspect(term, opts) when is_map(term) do
     case term do
       %module{} ->
+        # struct data
         case process_map(term) do
           {_, term} ->
             Inspect.Any.inspect(term, Identifier.inspect_as_atom(module), opts)
 
           _ ->
-            Inspect.Any.inspect(term, opts)
+            Inspect.inspect(term, opts)
         end
 
       _ ->
-        process_map(term)
+        # map data
+        term
+        |> process_map()
         |> inspect_limited_map(opts)
     end
   end
@@ -24,7 +33,7 @@ defmodule Extrace.LimitFormatter do
     Inspect.inspect(term, opts)
   end
 
-  def process_map(old_term) do
+  defp process_map(old_term) do
     with true <- :recon_map.is_active(),
          {label, term} <- :recon_map.process_map(old_term),
          true <- Map.keys(old_term) != Map.keys(term) do
