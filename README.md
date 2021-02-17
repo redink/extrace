@@ -13,7 +13,7 @@ iex(1)> Extrace.calls([{Enum, :take_random, fn _ -> :return end}, {Enum, :count,
 4
 ```
 
-Note that the functions to be traced (`:take_random` and `:count` in the example above) cannot be private.
+Note that the functions to be traced (`:take_random` and `:count` in the example above) can only be private if `scope: :local` is set.
 
 2, one function executed
 
