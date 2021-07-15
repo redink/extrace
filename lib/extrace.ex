@@ -5,13 +5,15 @@ defmodule Extrace do
   @moduledoc """
   `Extrace` provides functions for tracing events in a safe
   manner for single Erlang virtual machine, currently for function
-  calls only. Functionality includes:
+  calls only.
+
+  Functionality includes:
 
   - Nicer to use interface (arguably) than `:dbg` or trace BIFs.
   - Protection against dumb decisions (matching all calls on a node
     being traced, for example)
   - Adding safe guards in terms of absolute trace count or
-    rate-limitting
+    rate-limiting
   - Nicer formatting than default traces
 
   ## Tracing Elixir and Erlang Code
@@ -106,13 +108,13 @@ defmodule Extrace do
   an integer greater than `1`.
 
   The limit was also set using `{10, 100}` instead of an integer,
-  making the rate-limitting at 10 messages per 100 milliseconds,
+  making the rate-limiting at 10 messages per 100 milliseconds,
   instead of an absolute value.
 
   Any tracing can be manually interrupted by calling
   `Extrace.clear/0`, or killing the shell process.
 
-  Be aware that extremely broad patterns with lax rate-limitting (or
+  Be aware that extremely broad patterns with lax rate-limiting (or
   very high absolute limits) may impact your node's stability in ways
   `Extrace` cannot easily help you with.
 
@@ -328,7 +330,7 @@ defmodule Extrace do
 
   @doc """
   Returns tspec with its `shellfun` replaced with `matchspec`.
-  This futction is used by `calls/2` and `calls/3`.
+  This function is used by `calls/2` and `calls/3`.
   """
   @spec to_erl_tspec(tspec) :: tspec
   def to_erl_tspec({mod, fun, shellfun}) when is_function(shellfun) do
