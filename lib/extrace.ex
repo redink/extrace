@@ -198,7 +198,7 @@ defmodule Extrace do
 
   @type mod :: :_ | module
   @type f :: :_ | atom
-  @type args :: :_ | 0..255 | matchspec | shellfun
+  @type args :: :_  | :return_trace | 0..255 | matchspec | shellfun
   @type tspec :: {mod, f, args}
   @type max :: max_traces | max_rate
   @type num_matches :: non_neg_integer
