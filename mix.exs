@@ -2,13 +2,13 @@ defmodule Extrace.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/redink/extrace"
-  @version "0.3.1"
+  @version "0.4.0"
 
   def project do
     [
       app: :extrace,
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.14.0",
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
