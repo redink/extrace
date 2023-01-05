@@ -14,8 +14,14 @@ defmodule Extrace.LimitFormatter do
         # struct data
         case process_map(term) do
           {_, term} ->
-            infos = Map.to_list(term)
-            Inspect.Any.inspect(term, inspect_as_atom(module), infos, opts)
+            infos = struct_infos(module, term)
+
+            Inspect.Any.inspect(
+              term,
+              Macro.inspect_atom(:literal, module),
+              infos,
+              opts
+            )
 
           _ ->
             Inspect.inspect(term, opts)
@@ -29,15 +35,15 @@ defmodule Extrace.LimitFormatter do
     end
   end
 
+  defp struct_infos(module, map) do
+    for %{field: field} = info <- module.__info__(:struct),
+        field in Map.keys(map),
+        do: info
+  end
+
   def limit_inspect(term, opts) do
     Inspect.inspect(term, opts)
   end
-
-  @spec inspect_as_atom(atom()) :: binary()
-  def inspect_as_atom(true), do: true
-  def inspect_as_atom(false), do: false
-  def inspect_as_atom(nil), do: nil
-  def inspect_as_atom(atom) when is_atom(atom), do: ":#{atom}"
 
   defp process_map(old_term) do
     with true <- :recon_map.is_active(),
@@ -68,7 +74,7 @@ defmodule Extrace.LimitFormatter do
         end
       end
 
-    container_doc(open, map ++ ["..."], close, opts, traverse_fun, separator: sep, break: :strict)
+    container_doc(open, map ++ [:...], close, opts, traverse_fun, separator: sep, break: :strict)
   end
 
   defp inspect_limited_map(map, opts) do
