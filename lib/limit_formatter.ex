@@ -14,7 +14,8 @@ defmodule Extrace.LimitFormatter do
         # struct data
         case process_map(term) do
           {_, term} ->
-            Inspect.Any.inspect(term, inspect_as_atom(module), opts)
+            infos = Map.to_list(term)
+            Inspect.Any.inspect(term, inspect_as_atom(module), infos, opts)
 
           _ ->
             Inspect.inspect(term, opts)
