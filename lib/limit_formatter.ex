@@ -4,7 +4,6 @@ defmodule Extrace.LimitFormatter do
   more details can be found `:recon_map`.
   """
   import Inspect.Algebra
-  alias Code.Identifier
 
   @doc """
   Formatting & Trimming output to selected fields.
@@ -15,7 +14,7 @@ defmodule Extrace.LimitFormatter do
         # struct data
         case process_map(term) do
           {_, term} ->
-            Inspect.Any.inspect(term, Identifier.inspect_as_atom(module), opts)
+            Inspect.Any.inspect(term, inspect_as_atom(module), opts)
 
           _ ->
             Inspect.inspect(term, opts)
@@ -32,6 +31,12 @@ defmodule Extrace.LimitFormatter do
   def limit_inspect(term, opts) do
     Inspect.inspect(term, opts)
   end
+
+  @spec inspect_as_atom(atom()) :: binary()
+  def inspect_as_atom(true), do: true
+  def inspect_as_atom(false), do: false
+  def inspect_as_atom(nil), do: nil
+  def inspect_as_atom(atom) when is_atom(atom), do: ":#{atom}"
 
   defp process_map(old_term) do
     with true <- :recon_map.is_active(),
