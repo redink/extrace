@@ -4,7 +4,6 @@ defmodule Extrace.LimitFormatter do
   more details can be found `:recon_map`.
   """
   import Inspect.Algebra
-  alias Code.Identifier
 
   @doc """
   Formatting & Trimming output to selected fields.
@@ -15,7 +14,14 @@ defmodule Extrace.LimitFormatter do
         # struct data
         case process_map(term) do
           {_, term} ->
-            Inspect.Any.inspect(term, Identifier.inspect_as_atom(module), opts)
+            infos = struct_infos(module, term)
+
+            Inspect.Any.inspect(
+              term,
+              Macro.inspect_atom(:literal, module),
+              infos,
+              opts
+            )
 
           _ ->
             Inspect.inspect(term, opts)
@@ -27,6 +33,12 @@ defmodule Extrace.LimitFormatter do
         |> process_map()
         |> inspect_limited_map(opts)
     end
+  end
+
+  defp struct_infos(module, map) do
+    for %{field: field} = info <- module.__info__(:struct),
+        field in Map.keys(map),
+        do: info
   end
 
   def limit_inspect(term, opts) do
@@ -62,7 +74,7 @@ defmodule Extrace.LimitFormatter do
         end
       end
 
-    container_doc(open, map ++ ["..."], close, opts, traverse_fun, separator: sep, break: :strict)
+    container_doc(open, map ++ [:...], close, opts, traverse_fun, separator: sep, break: :strict)
   end
 
   defp inspect_limited_map(map, opts) do

@@ -56,7 +56,7 @@ defmodule ExtraceTest do
     map_set = MapSet.new()
 
     assert format({:trace_ts, pid(0, 1, 2), :return_from, {MapSet, :new, 0}, map_set, ts}) ==
-             '\n#{format_timestamp(ts)} <0.1.2> MapSet.new/0 --> #MapSet<[]>\n'
+             '\n#{format_timestamp(ts)} <0.1.2> MapSet.new/0 --> MapSet.new([])\n'
   end
 
   test "format/1 for :return_to" do
