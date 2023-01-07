@@ -35,14 +35,14 @@ defmodule Extrace.LimitFormatter do
     end
   end
 
+  def limit_inspect(term, opts) do
+    Inspect.inspect(term, opts)
+  end
+
   defp struct_infos(module, map) do
     for %{field: field} = info <- module.__info__(:struct),
         field in Map.keys(map),
         do: info
-  end
-
-  def limit_inspect(term, opts) do
-    Inspect.inspect(term, opts)
   end
 
   defp process_map(old_term) do

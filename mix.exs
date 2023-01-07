@@ -8,7 +8,7 @@ defmodule Extrace.MixProject do
     [
       app: :extrace,
       version: @version,
-      elixir: "~> 1.14.0",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
