@@ -15,6 +15,7 @@ defmodule ExtraceTest do
     matchspec = [{[:item, :_], [], [{:return_trace}]}]
 
     assert to_erl_tspec({:queue, :in, shellfun}) == {:queue, :in, matchspec}
+    assert to_erl_tspec({:queue, :in, :return}) == {:queue, :in, :return_trace}
   end
 
   test "format/1 for :call" do
