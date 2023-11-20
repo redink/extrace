@@ -16,7 +16,7 @@ in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:extrace, "~> 0.3.0"}
+    {:extrace, "~> 0.5.0"}
   ]
 end
 ```
