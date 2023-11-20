@@ -26,11 +26,11 @@ end
 Set point:
 
 ```elixir
-iex> Extrace.calls([{Enum, :take_random, fn _ -> :return end}, {Enum, :count, fn _ -> :return end}], 100, [scope: :local])
+iex> Extrace.calls([{Enum, :take_random, :return}, {Enum, :count, :return}], 100, [scope: :local])
 4
 ```
 
-Note that the functions to be traced (`:take_random` and `:count` in the example above) can only be private if `scope: :local` is set.
+Note that the functions to be traced (`:take_random` and `:count` in the example above) can be private if `scope: :local` is set.
 
 One function executed:
 
@@ -72,6 +72,24 @@ iex(4)> Enum.count([1,2,3,4])
 18:42:27.383667 <0.183.0> Enum.count([1, 2, 3, 4])
 
 18:42:27.383795 <0.183.0> Enum.count/1 --> 4
+```
+
+We can match the argument list in a specific manner. For example, we can trace
+`Enum.at/2` with the first argument (the enumerable) that has `1` as its
+initial element:
+
+```elixir
+iex(5)> Extrace.calls({Enum, :at, fn [x, _] when hd(x) == 1 -> :return end}, 2)
+2
+iex(6)> Enum.at([2, 3, 4], 1)
+3
+iex(7)> Enum.at([1, 7, 5], 1)
+7
+
+14:01:22.321329 <0.111.0> Enum.at([1, 7, 5], 1)
+
+14:01:22.321653 <0.111.0> Enum.at/2 --> 7
+Recon tracer rate limit tripped.
 ```
 
 ## Copyright and License

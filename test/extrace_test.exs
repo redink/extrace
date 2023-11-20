@@ -40,7 +40,7 @@ defmodule ExtraceTest do
              {:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %{test: true, a: 1, b: 2},
               ts}
            ) ==
-             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, ...}\n'
+             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, test: true}\n'
 
     assert format(
              {:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %{a: 1, b: 2, c: 3}, ts}
@@ -51,7 +51,7 @@ defmodule ExtraceTest do
 
     # Format an Struct data
     assert format({:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %Inspect.Opts{}, ts}) ==
-             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> #Inspect.Opts<limit: 50, width: 80, ...>\n'
+             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %Inspect.Opts{\n  base: :decimal,\n  binaries: :infer,\n  char_lists: :infer,\n  charlists: :infer,\n  custom_options: [],\n  inspect_fun: &Inspect.inspect/2,\n  limit: 50,\n  pretty: false,\n  printable_limit: 4096,\n  safe: true,\n  structs: true,\n  syntax_colors: [],\n  width: 80\n}\n'
 
     map_set = MapSet.new()
 

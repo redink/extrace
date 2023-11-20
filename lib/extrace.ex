@@ -197,7 +197,7 @@ defmodule Extrace do
 
   @type mod :: :_ | module
   @type f :: :_ | atom
-  @type args :: :_ | :return_trace | 0..255 | matchspec | shellfun
+  @type args :: :_ | :return | 0..255 | matchspec | shellfun
   @type tspec :: {mod, f, args}
   @type max :: max_traces | max_rate
   @type num_matches :: non_neg_integer
@@ -334,6 +334,10 @@ defmodule Extrace do
   @spec to_erl_tspec(tspec) :: tspec
   def to_erl_tspec({mod, fun, shellfun}) when is_function(shellfun) do
     {mod, fun, fun_to_match_spec(shellfun)}
+  end
+
+  def to_erl_tspec({mod, fun, :return}) do
+    {mod, fun, :return_trace}
   end
 
   def to_erl_tspec({_mod, _fun, _arity_or_matchspec} = tspec) do
@@ -523,6 +527,6 @@ defmodule Extrace do
 
   @doc false
   defp inspect_opts() do
-    Application.get_env(:extrace, :inspect_opts, [pretty: true])
+    Application.get_env(:extrace, :inspect_opts, [pretty: true, limit: 50])
   end
 end
