@@ -527,6 +527,6 @@ defmodule Extrace do
 
   @doc false
   defp inspect_opts() do
-    Application.get_env(:extrace, :inspect_opts, [pretty: true])
+    Application.get_env(:extrace, :inspect_opts, pretty: true)
   end
 end
