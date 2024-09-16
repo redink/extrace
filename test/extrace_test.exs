@@ -24,11 +24,11 @@ defmodule ExtraceTest do
     assert format(
              {:trace_ts, pid(0, 1, 2), :call, {Emum, :each, [[:hello, "world"], &IO.puts/1]}, ts}
            ) ==
-             '\n#{format_timestamp(ts)} <0.1.2> Emum.each([:hello, "world"], &IO.puts/1)\n'
+             ~c'\n#{format_timestamp(ts)} <0.1.2> Emum.each([:hello, "world"], &IO.puts/1)\n'
 
     # Format an Erlang module call
     assert format({:trace_ts, pid(0, 1, 2), :call, {:lists, :seq, [1, 10]}, ts}) ==
-             '\n#{format_timestamp(ts)} <0.1.2> :lists.seq(1, 10)\n'
+             ~c"\n#{format_timestamp(ts)} <0.1.2> :lists.seq(1, 10)\n"
   end
 
   test "limit format/1 for :call " do
@@ -40,30 +40,30 @@ defmodule ExtraceTest do
              {:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %{test: true, a: 1, b: 2},
               ts}
            ) ==
-             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, ...}\n'
+             ~c"\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, ...}\n"
 
     assert format(
              {:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %{a: 1, b: 2, c: 3}, ts}
            ) ==
-             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, c: 3}\n'
+             ~c"\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> %{a: 1, b: 2, c: 3}\n"
 
     :ok = :recon_map.limit(:struct, &match?(%Inspect.Opts{}, &1), [:limit, :width])
 
     # Format an Struct data
     assert format({:trace_ts, pid(0, 1, 2), :return_from, {IO, :inspect, 1}, %Inspect.Opts{}, ts}) ==
-             '\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> #Inspect.Opts<limit: 50, width: 80, ...>\n'
+             ~c"\n#{format_timestamp(ts)} <0.1.2> IO.inspect/1 --> #Inspect.Opts<limit: 50, width: 80, ...>\n"
 
     map_set = MapSet.new()
 
     assert format({:trace_ts, pid(0, 1, 2), :return_from, {MapSet, :new, 0}, map_set, ts}) ==
-             '\n#{format_timestamp(ts)} <0.1.2> MapSet.new/0 --> MapSet.new([])\n'
+             ~c"\n#{format_timestamp(ts)} <0.1.2> MapSet.new/0 --> MapSet.new([])\n"
   end
 
   test "format/1 for :return_to" do
     ts = :os.timestamp()
 
     assert format({:trace_ts, pid(0, 1, 2), :return_from, {Emum, :each, 2}, :ok, ts}) ==
-             '\n#{format_timestamp(ts)} <0.1.2> Emum.each/2 --> :ok\n'
+             ~c"\n#{format_timestamp(ts)} <0.1.2> Emum.each/2 --> :ok\n"
   end
 
   #################
@@ -85,7 +85,7 @@ defmodule ExtraceTest do
   # end
 
   defp pid(a, b, c) do
-    :erlang.list_to_pid('<#{a}.#{b}.#{c}>')
+    :erlang.list_to_pid(~c"<#{a}.#{b}.#{c}>")
   end
 
   defp to_hms({_, _, micro} = ts) do
@@ -95,7 +95,7 @@ defmodule ExtraceTest do
   end
 
   defp format_hms({h, m, s}) do
-    :io_lib.format('~2.2.0w:~2.2.0w:~9.6.0f', [h, m, s])
+    :io_lib.format(~c"~2.2.0w:~2.2.0w:~9.6.0f", [h, m, s])
   end
 
   defp format_timestamp(ts) do
